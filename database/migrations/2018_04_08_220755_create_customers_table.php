@@ -7,19 +7,22 @@ use Illuminate\Database\Migrations\Migration;
 class CreateCustomersTable extends Migration
 {
     /**
-     * Run the migrations.
      *
-     * @return void
      */
     public function up()
     {
         Schema::create('customers', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
+//            $table->bigInteger('user_id')->unsigned();
             $table->string('name');
             $table->string('email');
             $table->string('phone');
             $table->string('website');
+
             $table->timestamps();
+            $table->softDeletes();
+
+//            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -11,7 +11,7 @@
                 <th>Actions</th>
             </thead>
             <tbody>
-                <template v-if="!customers.length">
+                <template v-if="customers && !customers.length">
                     <tr>
                         <td colspan="4" class="text-center">No Customers Available</td>
                     </tr>
@@ -35,7 +35,7 @@
     export default {
         name: 'list',
         mounted() {
-            if (this.customers.length) {
+            if(this.customers.length) {
                 return;
             }
             

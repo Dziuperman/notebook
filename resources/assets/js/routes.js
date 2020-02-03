@@ -1,4 +1,5 @@
 import Home from './components/Home.vue';
+import Register from './components/auth/Register.vue';
 import Login from './components/auth/Login.vue';
 import CustomersMain from './components/customers/Main.vue';
 import CustomersList from './components/customers/List.vue';
@@ -12,6 +13,10 @@ export const routes = [
         meta: {
             requiresAuth: true
         }
+    },
+    {
+        path: '/register',
+        component: Register
     },
     {
         path: '/login',

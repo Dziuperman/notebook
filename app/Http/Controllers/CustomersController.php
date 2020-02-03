@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Customer;
-
 use App\Http\Requests\CreateCustomerRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CustomersController extends Controller
 {
@@ -29,6 +29,8 @@ class CustomersController extends Controller
 
     public function new(CreateCustomerRequest $request)
     {
+        $user = Auth::user();
+
         $customer = Customer::create($request->only(["name", "email", "phone", "website"]));
 
         return response()->json([
