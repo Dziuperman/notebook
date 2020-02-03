@@ -1,6 +1,6 @@
 <template>
     <div class="customer-new">
-        <form @submit.prevent="add">
+        <form @submit.prevent="update">
             <table class="table">
                 <tr>
                     <th>Name</th>
@@ -31,25 +31,26 @@
                         <router-link to="/customers" class="btn">Cancel</router-link>
                     </td>
                     <td class="text-right">
-                        <input type="submit" value="Create" class="btn btn-primary">
+                        <input type="submit" value="Update" class="btn btn-primary">
                     </td>
                 </tr>
             </table>
         </form>
-        <div class="errors" v-if="errors">
-            <ul>
-                <li v-for="(fieldsError, fieldName) in errors" :key="fieldName">
-                    <strong>{{ fieldName }}</strong> {{ fieldsError.join('\n') }}
-                </li>
-            </ul>
-        </div>
+<!--        <div class="errors" v-if="errors">-->
+<!--            <ul>-->
+<!--                <li v-for="(fieldsError, fieldName) in errors" :key="fieldName">-->
+<!--                    <strong>{{ fieldName }}</strong> {{ fieldsError.join('\n') }}-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
     </div>
 </template>
 
 <script>
     import validate from 'validate.js';
+
     export default {
-        name: 'new',
+        name: 'update-customer',
         data() {
             return {
                 customer: {
@@ -58,24 +59,40 @@
                     phone: '',
                     website: ''
                 },
-                errors: null
             };
+        },
+        created() {
+            if (this.customers.length) {
+                this.customer = this.customers.find((customer) => customer.id == this.$route.params.id);
+            } else {
+                axios.post(`/api/customers/${this.$route.params.id}`, this.$data.customer)
+                    .then((response) => {
+                        this.customer = response.data.customer
+                    });
+            }
         },
         computed: {
             currentUser() {
                 return this.$store.getters.currentUser;
+            },
+            customers() {
+                return this.$store.getters.customers;
             }
         },
         methods: {
-            add() {
+            update() {
                 this.errors = null;
+
                 const constraints = this.getConstraints();
+
                 const errors = validate(this.$data.customer, constraints);
+
                 if(errors) {
                     this.errors = errors;
                     return;
                 }
-                axios.post('/api/customers/new', this.$data.customer)
+
+                axios.post(`/api/customers/update/${this.$route.params.id}`, this.$data.customer)
                     .then((response) => {
                         this.$router.push('/customers');
                     });
@@ -118,3 +135,4 @@
         padding: 21px 0 2px 0;
     }
 </style>
+

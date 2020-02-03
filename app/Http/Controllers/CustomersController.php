@@ -2,12 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\CustomerRepository;
 use Illuminate\Http\Request;
 use App\Customer;
 use App\Http\Requests\CreateCustomerRequest;
 
 class CustomersController extends Controller
 {
+    /**
+     * @var CustomerRepository
+     */
+    private $customerRepository;
+
+    /**
+     * CustomerController constructor.
+     */
+    public function __construct()
+    {
+        $this->customerRepository = app(CustomerRepository::class);
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function all()
     {
         $currentUserId = \Auth::user()->id;
@@ -39,8 +56,21 @@ class CustomersController extends Controller
         ], 200);
     }
 
-    public function update(CreateCustomerRequest $request, $id)
-    {
-
-    }
+//    public function update($id)
+//    {
+//        $item = $this->customerRepository->getEdit($id);
+//
+//        $data = $request->all();
+//
+//        $result = $item->update($data);
+//
+//        if ($result) {
+//            return response()->json([
+//                "customer" => $result
+//            ], 200);
+//
+//        }
+//
+//        return false;
+//    }
 }

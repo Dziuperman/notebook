@@ -5,6 +5,7 @@ import CustomersMain from './components/customers/Main.vue';
 import CustomersList from './components/customers/List.vue';
 import NewCustomer from './components/customers/New.vue';
 import Customer from './components/customers/View.vue';
+import Update from './components/customers/Update.vue';
 
 export const routes = [
     {
@@ -40,7 +41,11 @@ export const routes = [
             {
                 path: ':id',
                 component: Customer
-            }
+            },
+            // {
+            //     path: 'update/:id',
+            //     component: Update
+            // },
         ]
     }
 ];
