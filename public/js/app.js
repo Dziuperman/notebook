@@ -51431,14 +51431,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 name: '',
                 email: '',
                 password: ''
-            }
+            },
+            error: null
         };
     },
 
     methods: {
         registerUser: function registerUser() {
+            var _this = this;
+
             axios.post('/api/auth/register', this.$data.form).then(function (response) {
                 console.log(response);
+                _this.$router.push({ path: '/login' });
             }).catch(function (error) {
                 console.log(error.response);
             });
@@ -54139,6 +54143,14 @@ var user = Object(__WEBPACK_IMPORTED_MODULE_0__helpers_auth__["a" /* getLocalUse
         loginSuccess: function loginSuccess(state, payload) {
             state.auth_error = null;
             state.isLoggedIn = true;
+            state.loading = false;
+            state.currentUser = Object.assign({}, payload.user, { token: payload.access_token });
+
+            localStorage.setItem("user", JSON.stringify(state.currentUser));
+        },
+        registerSuccess: function registerSuccess(state, payload) {
+            state.auth_error = null;
+            state.isRegister = true;
             state.loading = false;
             state.currentUser = Object.assign({}, payload.user, { token: payload.access_token });
 

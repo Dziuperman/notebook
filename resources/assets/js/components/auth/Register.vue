@@ -42,7 +42,8 @@
                     name: '',
                     email: '',
                     password: ''
-                }
+                },
+                error: null
             }
         },
         methods: {
@@ -50,6 +51,7 @@
                 axios.post('/api/auth/register', this.$data.form)
                     .then(response => {
                         console.log(response);
+                        this.$router.push({path: '/login'});
                     })
                     .catch(error => {
                         console.log(error.response);

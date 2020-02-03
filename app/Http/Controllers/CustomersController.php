@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Customer;
 use App\Http\Requests\CreateCustomerRequest;
-use Illuminate\Support\Facades\Auth;
 
 class CustomersController extends Controller
 {
     public function all()
     {
-        $customers = Customer::all();
+        $currentUserId = \Auth::user()->id;
+        $customers = Customer::where('user_id', '=' , $currentUserId)->get();
 
         return response()->json([
             "customers" => $customers
@@ -29,12 +29,18 @@ class CustomersController extends Controller
 
     public function new(CreateCustomerRequest $request)
     {
-        $user = Auth::user();
+        $data = $request->only(["name", "email", "phone", "website"]);
+        $data['user_id'] = \Auth::user()->id;
 
-        $customer = Customer::create($request->only(["name", "email", "phone", "website"]));
+        $customer = Customer::create($data);
 
         return response()->json([
             "customer" => $customer
         ], 200);
+    }
+
+    public function update(CreateCustomerRequest $request, $id)
+    {
+
     }
 }

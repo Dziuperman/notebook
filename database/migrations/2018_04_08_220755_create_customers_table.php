@@ -13,7 +13,7 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->bigIncrements('id');
-//            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
             $table->string('name');
             $table->string('email');
             $table->string('phone');
@@ -22,7 +22,7 @@ class CreateCustomersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-//            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

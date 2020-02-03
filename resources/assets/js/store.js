@@ -40,6 +40,14 @@ export default {
 
             localStorage.setItem("user", JSON.stringify(state.currentUser));
         },
+        registerSuccess(state, payload) {
+            state.auth_error = null;
+            state.isRegister = true;
+            state.loading = false;
+            state.currentUser = Object.assign({}, payload.user, {token: payload.access_token});
+
+            localStorage.setItem("user", JSON.stringify(state.currentUser));
+        },
         loginFailed(state, payload) {
             state.loading = false;
             state.auth_error = payload.error;
