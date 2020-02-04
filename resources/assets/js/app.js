@@ -7,6 +7,7 @@ import StoreData from './store';
 import MainApp from './components/MainApp.vue';
 import {initialize} from './helpers/general';
 
+Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.use(VueRouter);
 Vue.use(Vuex);
 

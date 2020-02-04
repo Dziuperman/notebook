@@ -66,7 +66,7 @@ export default {
             context.commit("login");
         },
         getCustomers(context) {
-            axios.post('/api/customers')
+            axios.get('/api/customers')
             .then((response) => {
                 context.commit('updateCustomers', response.data.customers);
             })

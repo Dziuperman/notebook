@@ -27,34 +27,25 @@ class CustomerRepository extends CoreRepository
      *
      * @return LengthAwarePaginator
      */
-//    public function getAllWithPaginate()
-//    {
-//        $columns = [
-//            'id',
-//            'title',
-//            'slug',
-//            'is_published',
-//            'published_at',
-//            'user_id',
-//            'category_id',
-//        ];
-//
-//        $result = $this->startConditions()
+    public function getAllWithPaginate()
+    {
+        $columns = [
+            'id',
+            'name',
+            'email',
+            'phone',
+            'website',
+            'user_id',
+        ];
+
+        $result = $this->startConditions()
 //            ->select($columns)
-//            ->orderBy('id', 'DESC')
-////            ->with(['category', 'user'])
-//            ->with([
-//                'category' => function ($query) {
-//                    $query->select(['id', 'title']);
-//                },
-//                // или так
-//                'user:id,name'
-//            ])
-//            ->paginate(25);
-//
-//        return $result;
-//    }
-//
+//            ->orderBy('name', 'DESC')
+            ->paginate(2);
+
+        return $result;
+    }
+
     /**
      * Получить модель для редактирования в админке
      *
