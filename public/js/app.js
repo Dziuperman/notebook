@@ -52405,6 +52405,9 @@ var routes = [{
     }, {
         path: ':id',
         component: __WEBPACK_IMPORTED_MODULE_6__components_customers_View_vue___default.a
+    }, {
+        path: 'update/:id',
+        component: __WEBPACK_IMPORTED_MODULE_7__components_customers_Update_vue___default.a
     }]
 }];
 
@@ -53339,6 +53342,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'list',
@@ -53405,6 +53409,12 @@ var render = function() {
                         "router-link",
                         { attrs: { to: "/customers/" + customer.id } },
                         [_vm._v("View")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "router-link",
+                        { attrs: { to: "/customers/update/" + customer.id } },
+                        [_vm._v("Edit")]
                       )
                     ],
                     1
@@ -53632,8 +53642,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return;
             }
             axios.post('/api/customers/new', this.$data.customer).then(function (response) {
-                // this.$router.push('/customers');
-                console.log(_this.$data.customer);
+                _this.$router.push('/customers');
             });
         },
         getConstraints: function getConstraints() {
@@ -54258,7 +54267,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 email: '',
                 phone: '',
                 website: ''
-            }
+            },
+            errors: null
         };
     },
     created: function created() {
@@ -54482,7 +54492,21 @@ var render = function() {
           ])
         ])
       ]
-    )
+    ),
+    _vm._v(" "),
+    _vm.errors
+      ? _c("div", { staticClass: "errors" }, [
+          _c(
+            "ul",
+            _vm._l(_vm.errors, function(fieldsError, fieldName) {
+              return _c("li", { key: fieldName }, [
+                _c("strong", [_vm._v(_vm._s(fieldName))]),
+                _vm._v(" " + _vm._s(fieldsError.join("\n")) + "\n            ")
+              ])
+            })
+          )
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [

@@ -42,10 +42,10 @@ export const routes = [
                 path: ':id',
                 component: Customer
             },
-            // {
-            //     path: 'update/:id',
-            //     component: Update
-            // },
+            {
+                path: 'update/:id',
+                component: Update
+            },
         ]
     }
 ];

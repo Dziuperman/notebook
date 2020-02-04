@@ -23,6 +23,7 @@
                         <td>{{ customer.phone }}</td>
                         <td>
                             <router-link :to="`/customers/${customer.id}`">View</router-link>
+                            <router-link :to="`/customers/update/${customer.id}`">Edit</router-link>
                         </td>
                     </tr>
                 </template>

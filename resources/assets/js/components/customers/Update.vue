@@ -36,13 +36,13 @@
                 </tr>
             </table>
         </form>
-<!--        <div class="errors" v-if="errors">-->
-<!--            <ul>-->
-<!--                <li v-for="(fieldsError, fieldName) in errors" :key="fieldName">-->
-<!--                    <strong>{{ fieldName }}</strong> {{ fieldsError.join('\n') }}-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
+        <div class="errors" v-if="errors">
+            <ul>
+                <li v-for="(fieldsError, fieldName) in errors" :key="fieldName">
+                    <strong>{{ fieldName }}</strong> {{ fieldsError.join('\n') }}
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -59,6 +59,7 @@
                     phone: '',
                     website: ''
                 },
+                errors: null
             };
         },
         created() {
