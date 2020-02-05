@@ -27,12 +27,11 @@ class CustomersController extends Controller
      */
     public function all()
     {
-//        $paginator = $this->customerRepository->getAllWithPaginate();
-
         $currentUserId = \Auth::user()->id;
 
-//        $customers = Customer::where('user_id', '=' , $currentUserId)->get();
-        $customers = Customer::paginate(2);
+        $customers = Customer::where('user_id', '=', $currentUserId)
+            ->latest()
+            ->paginate(2);
 
         return response()->json([
             "customers" => $customers
@@ -41,7 +40,12 @@ class CustomersController extends Controller
 
     public function search($field, $query)
     {
-        $customers = Customer::where($field, 'LIKE', "%$query%")->latest()->paginate(2);
+        $currentUserId = \Auth::user()->id;
+
+        $customers = Customer::where('user_id', '=', $currentUserId)
+            ->where($field, 'LIKE', "%$query%")
+            ->latest()
+            ->paginate(2);
 
         return response()->json([
             "customers" => $customers
@@ -56,7 +60,9 @@ class CustomersController extends Controller
     {
         $currentUserId = \Auth::user()->id;
 
-        $customer = Customer::whereId($id)->where('user_id', '=', $currentUserId)->first();
+        $customer = Customer::whereId($id)
+            ->where('user_id', '=', $currentUserId)
+            ->first();
 
         return response()->json([
             "customer" => $customer

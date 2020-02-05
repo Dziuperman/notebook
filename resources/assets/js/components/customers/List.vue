@@ -1,24 +1,40 @@
 <template>
-    <div>
-        <form class="mb-3">
-            <div class="row">
-                <div class="col-md-2">
-                    Search By:
-                </div>
-                <div class="col-md-3">
-                    <select v-model="queryField" name="" id="fields" class="form-control">
-                        <option value="name">Name</option>
-                        <option value="email">Email</option>
-                        <option value="phone">Phone</option>
-                        <option value="website">Website</option>
-                        <option value="total">Total</option>
-                    </select>
-                </div>
-                <div class="col-md-7">
-                    <input v-model="query" type="text" class="form-control" placeholder="Search">
+    <div id="customer">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="curd-title">
+                            Customers
+                        </h4>
+                        <div class="card-tools" style="position: absolute; right: 1rem; top: 0.5rem">
+                            <button type="button" class="btn btn-primary" @click="reload">Reload</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    Search By:
+                                </div>
+                                <div class="col-md-3">
+                                    <select v-model="queryField" name="" id="fields" class="form-control">
+                                        <option value="name">Name</option>
+                                        <option value="email">Email</option>
+                                        <option value="phone">Phone</option>
+                                        <option value="website">Website</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-7">
+                                    <input v-model="query" type="text" class="form-control" placeholder="Search">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
+        </div>
+
         <div class="btn-wrapper">
             <router-link to="/customers/new" class="btn btn-primary btn-sm">New</router-link>
         </div>
@@ -46,12 +62,19 @@
                         </td>
                     </tr>
                 </template>
+                <tr v-show="customers.data && !customers.data.length">
+                    <td>
+                        <div class="alert alert-danger" role="alert">
+                            Sorry. No data found.
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
         <pagination v-if="pagination.last_page > 1"
                     :pagination="pagination"
                     :offset="5"
-                    @paginate="getData()">
+                    @paginate="query === '' ? getData() : searchData()">
         </pagination>
     </div>
 </template>
@@ -96,6 +119,7 @@
                         this.customers = response.data.customers;
                         this.pagination = response.data.customers;
                         console.log(this.pagination.current_page);
+                        console.log(this.customers.data.length);
                     })
             },
             searchData() {
@@ -106,7 +130,12 @@
                         this.customers = response.data.customers;
                         this.pagination = response.data.customers;
                     })
-            }
+            },
+            reload() {
+                this.getData();
+                this.query = '';
+                this.queryField = 'name';
+            },
         },
         computed: {
             // customers() {
