@@ -14,6 +14,8 @@ class CustomersController extends Controller
      */
     private $customerRepository;
 
+    private $customersPerPage = 2;
+
     /**
      * CustomerController constructor.
      */
@@ -31,7 +33,19 @@ class CustomersController extends Controller
 
         $customers = Customer::where('user_id', '=', $currentUserId)
             ->latest()
-            ->paginate(2);
+            ->paginate($this->customersPerPage);
+
+        return response()->json([
+            "customers" => $customers
+        ], 200);
+    }
+
+    public function list()
+    {
+        $currentUserId = \Auth::user()->id;
+
+        $customers = Customer::where('user_id', '=', $currentUserId)
+            ->latest()->get();
 
         return response()->json([
             "customers" => $customers
@@ -45,7 +59,7 @@ class CustomersController extends Controller
         $customers = Customer::where('user_id', '=', $currentUserId)
             ->where($field, 'LIKE', "%$query%")
             ->latest()
-            ->paginate(2);
+            ->paginate($this->customersPerPage);
 
         return response()->json([
             "customers" => $customers
@@ -115,7 +129,6 @@ class CustomersController extends Controller
         if($result) {
             return response()->json([
                 "customer" => $result,
-//                "success" => "Запись id[$id] удалена.",
             ], 200);
         }
     }

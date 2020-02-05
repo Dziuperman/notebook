@@ -62,11 +62,11 @@
                 errors: null
             };
         },
-        created() {
+        mounted() {
             if (this.customers.length) {
                 this.customer = this.customers.find((customer) => customer.id == this.$route.params.id);
             } else {
-                axios.post(`/api/customers/${this.$route.params.id}`, this.$data.customer)
+                axios.get(`/api/customers/${this.$route.params.id}`, this.$data.customer)
                     .then((response) => {
                         this.customer = response.data.customer
                     });

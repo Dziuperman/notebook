@@ -10,6 +10,14 @@
                         <div class="card-tools" style="position: absolute; right: 1rem; top: 0.5rem">
                             <button type="button" class="btn btn-primary" @click="reload">Reload</button>
                         </div>
+                        <vue-excel-xlsx
+                            @click=""
+                            :data="customers.data"
+                            :columns="columns"
+                            :filename="'filename'"
+                            :sheetname="'sheetname'">
+                            Download
+                        </vue-excel-xlsx>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
@@ -100,6 +108,24 @@
                 query: '',
                 queryField: 'name',
                 currentPage: null,
+                columns: [
+                    {
+                        label: "Name",
+                        field: "name"
+                    },
+                    // {
+                    //     label: "Email",
+                    //     field: "email"
+                    // },
+                    // {
+                    //     label: "Phone",
+                    //     field: "phone"
+                    // },
+                    // {
+                    //     label: "Website",
+                    //     field: "website"
+                    // },
+                ],
             }
         },
         watch: {
