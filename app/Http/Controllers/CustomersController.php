@@ -39,6 +39,15 @@ class CustomersController extends Controller
         ], 200);
     }
 
+    public function search($field, $query)
+    {
+        $customers = Customer::where($field, 'LIKE', "%$query%")->latest()->paginate(2);
+
+        return response()->json([
+            "customers" => $customers
+        ], 200);
+    }
+
     /**
      * @param $id
      * @return \Illuminate\Http\JsonResponse
