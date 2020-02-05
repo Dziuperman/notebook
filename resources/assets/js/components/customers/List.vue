@@ -57,8 +57,15 @@
                         <td>{{ customer.email }}</td>
                         <td>{{ customer.phone }}</td>
                         <td>
-                            <router-link :to="`/customers/${customer.id}`">View</router-link>
-                            <router-link :to="`/customers/update/${customer.id}`">Edit</router-link>
+                            <router-link :to="`/customers/${customer.id}`">
+                                <div class="btn btn-primary"><i class="far fa-eye"></i></div>
+                            </router-link>
+                            <router-link :to="`/customers/update/${customer.id}`">
+                                <div class="btn btn-primary"><i class="fas fa-edit"></i></div>
+                            </router-link>
+                            <button class="btn btn-primary" @click.prevent="deleteCustomer(customer.id)">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 </template>
@@ -71,15 +78,17 @@
                 </tr>
             </tbody>
         </table>
-        <pagination v-if="pagination.last_page > 1"
+        <pagination-component v-if="pagination.last_page > 1"
                     :pagination="pagination"
                     :offset="5"
                     @paginate="query === '' ? getData() : searchData()">
-        </pagination>
+        </pagination-component>
     </div>
 </template>
 
 <script>
+    import PaginationComponent from "../partial/PaginationComponent";
+
     export default {
         name: 'list',
         data() {
@@ -136,6 +145,12 @@
                 this.query = '';
                 this.queryField = 'name';
             },
+            deleteCustomer(id) {
+                axios.delete(`api/customers/delete/${id}`, this.$data.customers)
+                    .then(response => {
+                        this.getData();
+                    })
+            }
         },
         computed: {
             // customers() {
@@ -143,7 +158,7 @@
             // }
         },
         components: {
-            // PaginationComponent,
+            PaginationComponent,
         }
     }
 </script>

@@ -107,4 +107,16 @@ class CustomersController extends Controller
 
         return false;
     }
+
+    public function destroy($id)
+    {
+        $result = Customer::find($id)->forceDelete();
+
+        if($result) {
+            return response()->json([
+                "customer" => $result,
+//                "success" => "Запись id[$id] удалена.",
+            ], 200);
+        }
+    }
 }
