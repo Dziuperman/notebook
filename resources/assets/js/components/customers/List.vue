@@ -108,6 +108,7 @@
                 query: '',
                 queryField: 'name',
                 currentPage: null,
+                customerList: [],
                 columns: [
                     {
                         label: "Name",
@@ -175,6 +176,12 @@
                 axios.delete(`api/customers/delete/${id}`, this.$data.customers)
                     .then(response => {
                         this.getData();
+                    })
+            },
+            getCustomerList() {
+                axios.get('api/customers/list')
+                    .then(response => {
+                        this.customerList = response.data.customers;
                     })
             }
         },
