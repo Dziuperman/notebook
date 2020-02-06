@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CustomersExport;
 use App\Repositories\CustomerRepository;
 use Illuminate\Http\Request;
 use App\Customer;
 use App\Http\Requests\CreateCustomerRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomersController extends Controller
 {
@@ -14,6 +16,9 @@ class CustomersController extends Controller
      */
     private $customerRepository;
 
+    /**
+     * @var customersPerPage
+     */
     private $customersPerPage = 2;
 
     /**
@@ -40,16 +45,11 @@ class CustomersController extends Controller
         ], 200);
     }
 
-    public function list()
+    public function export()
     {
-        $currentUserId = \Auth::user()->id;
+       return Excel::download(new CustomersExport(), 'customers.xlsx');
 
-        $customers = Customer::where('user_id', '=', $currentUserId)
-            ->latest()->get();
 
-        return response()->json([
-            "customers" => $customers
-        ], 200);
     }
 
     public function search($field, $query)

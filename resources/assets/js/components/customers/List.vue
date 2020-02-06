@@ -10,14 +10,7 @@
                         <div class="card-tools" style="position: absolute; right: 1rem; top: 0.5rem">
                             <button type="button" class="btn btn-primary" @click="reload">Reload</button>
                         </div>
-                        <vue-excel-xlsx
-                            @click=""
-                            :data="customers.data"
-                            :columns="columns"
-                            :filename="'filename'"
-                            :sheetname="'sheetname'">
-                            Download
-                        </vue-excel-xlsx>
+                        <button type="button" class="btn btn-primary" @click.prevent="exportXlsx">Download</button>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
@@ -108,25 +101,14 @@
                 query: '',
                 queryField: 'name',
                 currentPage: null,
-                customerList: [],
-                columns: [
-                    {
-                        label: "Name",
-                        field: "name"
-                    },
-                    // {
-                    //     label: "Email",
-                    //     field: "email"
-                    // },
-                    // {
-                    //     label: "Phone",
-                    //     field: "phone"
-                    // },
-                    // {
-                    //     label: "Website",
-                    //     field: "website"
-                    // },
-                ],
+                options: {
+                    responseType: 'blob',
+                },
+                settings: {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
             }
         },
         watch: {
@@ -178,11 +160,29 @@
                         this.getData();
                     })
             },
-            getCustomerList() {
-                axios.get('api/customers/list')
-                    .then(response => {
-                        this.customerList = response.data.customers;
-                    })
+            exportXlsx() {
+                // axios.get('api/customers/export', this.settings)
+                //     .then(response => {
+                //         console.log(response.headers)
+                //     })
+                //     .catch(error => {
+                //         console.log(error);
+                //     })
+                axios({
+                    url: 'api/customers/export',
+                    method: 'GET',
+                    responseType: 'blob',
+                }).then((response) => {
+                    let fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                    let fileLink = document.createElement('a');
+
+                    fileLink.href = fileURL;
+                    fileLink.setAttribute('download', 'file.xlsx');
+                    document.body.appendChild(fileLink);
+
+                    fileLink.click();
+                });
+
             }
         },
         computed: {
