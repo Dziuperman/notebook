@@ -56795,13 +56795,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         exportXlsx: function exportXlsx() {
-            // axios.get('api/customers/export', this.settings)
-            //     .then(response => {
-            //         console.log(response.headers)
-            //     })
-            //     .catch(error => {
-            //         console.log(error);
-            //     })
             axios({
                 url: 'api/customers/export',
                 method: 'GET',
@@ -57595,6 +57588,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             axios.post('/api/customers/new', this.$data.customer).then(function (response) {
                 _this.$router.push('/customers');
+            }).catch(function (error) {
+                console.log(error.message);
             });
         },
         getConstraints: function getConstraints() {
@@ -58262,6 +58257,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.post('/api/customers/update/' + this.$route.params.id, this.$data.customer).then(function (response) {
                 _this2.$router.push('/customers');
+            }).catch(function (error) {
+                console.log(error);
             });
         },
         getConstraints: function getConstraints() {

@@ -96,6 +96,9 @@
                 axios.post(`/api/customers/update/${this.$route.params.id}`, this.$data.customer)
                     .then((response) => {
                         this.$router.push('/customers');
+                    })
+                    .catch(error => {
+                        console.log(error);
                     });
             },
             getConstraints() {

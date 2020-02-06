@@ -52,6 +52,11 @@ class CustomersController extends Controller
 
     }
 
+    /**
+     * @param $field
+     * @param $query
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function search($field, $query)
     {
         $currentUserId = \Auth::user()->id;
@@ -122,6 +127,10 @@ class CustomersController extends Controller
         return false;
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         $result = Customer::find($id)->forceDelete();

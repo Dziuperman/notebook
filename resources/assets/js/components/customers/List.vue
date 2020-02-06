@@ -161,13 +161,6 @@
                     })
             },
             exportXlsx() {
-                // axios.get('api/customers/export', this.settings)
-                //     .then(response => {
-                //         console.log(response.headers)
-                //     })
-                //     .catch(error => {
-                //         console.log(error);
-                //     })
                 axios({
                     url: 'api/customers/export',
                     method: 'GET',
