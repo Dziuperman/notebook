@@ -48,8 +48,6 @@ class CustomersController extends Controller
     public function export()
     {
        return Excel::download(new CustomersExport(), 'customers.xlsx');
-
-
     }
 
     /**
