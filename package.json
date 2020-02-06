@@ -26,8 +26,10 @@
         "@fortawesome/vue-fontawesome": "^0.1.9",
         "laravel-vue-pagination": "^2.3.1",
         "validate.js": "^0.12.0",
+        "vform": "^1.0.1",
         "vue-excel-xlsx": "^1.0.11",
         "vue-router": "^3.0.1",
+        "vue-snotify": "^3.2.1",
         "vuex": "^3.0.1"
     }
 }
