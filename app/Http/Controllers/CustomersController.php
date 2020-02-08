@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ActivityLogExport;
 use App\Exports\CustomersExport;
 use App\Repositories\CustomerRepository;
 use Illuminate\Http\Request;
 use App\Customer;
 use App\Http\Requests\CreateCustomerRequest;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Activitylog\Models\Activity;
 
 class CustomersController extends Controller
 {
@@ -19,7 +21,7 @@ class CustomersController extends Controller
     /**
      * @var customersPerPage
      */
-    private $customersPerPage = 2;
+    private $customersPerPage = 5;
 
     /**
      * CustomerController constructor.
@@ -45,6 +47,9 @@ class CustomersController extends Controller
         ], 200);
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function export()
     {
        return Excel::download(new CustomersExport(), 'customers.xlsx');
@@ -138,5 +143,51 @@ class CustomersController extends Controller
                 "customer" => $result,
             ], 200);
         }
+
+        return false;
+    }
+
+    /**
+     * @return bool|\Illuminate\Http\JsonResponse
+     */
+    public function log()
+    {
+        $currentUserId = \Auth::user()->id;
+
+        $customers = Activity::where('causer_id', '=', $currentUserId)->get();
+
+        if($customers) {
+            return response()->json([
+                "log" => $customers,
+            ], 200);
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool|\Illuminate\Http\JsonResponse
+     */
+    public function activityLog()
+    {
+        $currentUserId = \Auth::user()->id;
+
+        $customers = Activity::where('causer_id', '=', $currentUserId)->get();
+
+        if($customers) {
+            return response()->json([
+                "activityLog" => $customers,
+            ], 200);
+        }
+
+        return false;
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function activityExport()
+    {
+        return Excel::download(new ActivityLogExport(), 'customers.xlsx');
     }
 }

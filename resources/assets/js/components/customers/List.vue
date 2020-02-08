@@ -11,6 +11,7 @@
                             <button type="button" class="btn btn-primary" @click="reload">Reload</button>
                         </div>
                         <button type="button" class="btn btn-primary" @click.prevent="exportXlsx">Download</button>
+                        <router-link to="customers/log/show">Log</router-link>
                     </div>
 
                     <div class="card-body">
@@ -91,6 +92,7 @@
             </tbody>
         </table>
 
+        <!-- Pagination -->
         <pagination-component v-if="pagination.last_page > 1"
                     :pagination="pagination"
                     :offset="5"
@@ -104,8 +106,7 @@
             tabindex="-1"
             role="dialog"
             aria-labelledby="customerModalLongTitle"
-            aria-hidden="true"
-        >
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -184,8 +185,7 @@
             tabindex="-1"
             role="dialog"
             aria-labelledby="showModalLabel"
-            aria-hidden="true"
-        >
+            aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -310,7 +310,6 @@
 
                     fileLink.click();
                 });
-
             },
             create() {
                 this.editMode = false;
