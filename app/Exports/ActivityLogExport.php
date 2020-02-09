@@ -27,21 +27,46 @@ class ActivityLogExport implements FromQuery, WithMapping, WithHeadings, WithCol
         return [
             $activity->description,
             $activity->created_at,
+            $this->getProperty($activity, 'name'),
+            $this->getProperty($activity, 'email'),
+            $this->getProperty($activity, 'phone'),
+            $this->getProperty($activity, 'website'),
+            $activity->properties['attributes']['created_at'],
+            $activity->properties['attributes']['updated_at'],
         ];
+    }
+
+    public function getProperty($array, $prop)
+    {
+
+        if(isset($array->properties['old']) && $array->properties['old'][$prop] !== $array->properties['attributes'][$prop]) {
+            return 'New: ' . $array->properties['attributes'][$prop] . '; Old: ' . $array->properties['old'][$prop];
+        }
+
+        return $array->properties['attributes'][$prop];
     }
 
     public function headings(): array
     {
         return [
             'Description',
+            'Date',
+            'Name',
+            'Email',
+            'Phone',
+            'Website',
             'Created at',
+            'Updated at',
         ];
     }
 
     public function columnFormats(): array
     {
         return [
-            'I' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'B' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'E' => "##,#0",
+            'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'H' => NumberFormat::FORMAT_DATE_DDMMYYYY,
         ];
     }
 
@@ -50,7 +75,7 @@ class ActivityLogExport implements FromQuery, WithMapping, WithHeadings, WithCol
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $event->sheet
-                    ->getStyle('A1:B1')
+                    ->getStyle('A1:H1')
                     ->applyFromArray(['font' => ['bold' => true,]]);
             }
         ];

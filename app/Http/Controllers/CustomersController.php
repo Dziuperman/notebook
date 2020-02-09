@@ -172,7 +172,7 @@ class CustomersController extends Controller
     {
         $currentUserId = \Auth::user()->id;
 
-        $customers = Activity::where('causer_id', '=', $currentUserId)->get();
+        $customers = Activity::where('causer_id', '=', $currentUserId)->latest()->get();
 
         if($customers) {
             return response()->json([
