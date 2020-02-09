@@ -6,6 +6,7 @@ import CustomersList from './components/customers/List.vue';
 import NewCustomer from './components/customers/New.vue';
 import Customer from './components/customers/View.vue';
 import Update from './components/customers/Update.vue';
+import ActivityLog from './components/customers/ActivityLog.vue';
 
 export const routes = [
     {
@@ -35,16 +36,8 @@ export const routes = [
                 component: CustomersList
             },
             {
-                path: 'new',
-                component: NewCustomer
-            },
-            {
-                path: ':id',
-                component: Customer
-            },
-            {
-                path: 'update/:id',
-                component: Update
+                path: 'log/show',
+                component: ActivityLog
             },
         ]
     }

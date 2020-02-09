@@ -39,8 +39,6 @@ class CustomerRepository extends CoreRepository
         ];
 
         $result = $this->startConditions()
-//            ->select($columns)
-//            ->orderBy('name', 'DESC')
             ->paginate(2);
 
         return $result;

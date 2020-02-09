@@ -77,7 +77,10 @@
                 }
                 axios.post('/api/customers/new', this.$data.customer)
                     .then((response) => {
-                        this.$router.push('/customers');
+                        this.$router.push('/customers')
+                    })
+                    .catch(error => {
+                        console.log(error.message);
                     });
             },
             getConstraints() {

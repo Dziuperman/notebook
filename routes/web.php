@@ -11,6 +11,9 @@
 |
 */
 
+use Spatie\Activitylog\Models\Activity;
+
 Route::get('{any}', function () {
+//    return Activity::all();
     return view('welcome');
 })->where('any', '.*');
