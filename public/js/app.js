@@ -56861,6 +56861,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -56964,6 +56971,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         create: function create() {
+            this.errors = null;
             this.editMode = false;
             this.form.reset();
             this.form.clear();
@@ -56985,6 +56993,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.form.post('/api/customers/new').then(function (response) {
                 _this4.getData();
                 $('#customerModalLong').modal('hide');
+                _this4.errors = null;
                 if (_this4.form.successful) {
                     _this4.$snotify.success('Customer successfully saved', 'Success');
                 } else {
@@ -57001,6 +57010,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             console.log(customer);
         },
         edit: function edit(customer) {
+            this.errors = null;
             this.editMode = true;
             this.form.reset();
             this.form.clear();
@@ -57009,6 +57019,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         update: function update() {
             var _this5 = this;
+
+            this.errors = null;
+            var constraints = this.getConstraints();
+            var errors = __WEBPACK_IMPORTED_MODULE_1_validate_js___default()(this.form, constraints);
+
+            if (errors) {
+                this.errors = errors;
+                return;
+            }
 
             this.form.busy = true;
             this.form.post("/api/customers/update/" + this.form.id).then(function (response) {
@@ -57079,11 +57098,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             };
         }
-    },
-    computed: {
-        // customers() {
-        //     return this.$store.getters.customers;
-        // }
     },
     components: {
         PaginationComponent: __WEBPACK_IMPORTED_MODULE_0__partial_PaginationComponent___default.a
@@ -57426,12 +57440,23 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("Download")]
+                  [
+                    _vm._v("Download "),
+                    _c("i", { staticClass: "far fa-file-excel" })
+                  ]
                 ),
                 _vm._v(" "),
-                _c("router-link", { attrs: { to: "customers/log/show" } }, [
-                  _vm._v("Log")
-                ])
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "btn btn-info",
+                    attrs: { to: "customers/log/show" }
+                  },
+                  [
+                    _vm._v("Log "),
+                    _c("i", { staticClass: "fas fa-align-justify" })
+                  ]
+                )
               ],
               1
             ),
@@ -57881,7 +57906,28 @@ var render = function() {
                         },
                         [_vm._v("Save changes")]
                       )
-                    ])
+                    ]),
+                    _vm._v(" "),
+                    _vm.errors
+                      ? _c("div", { staticClass: "errors" }, [
+                          _c(
+                            "ul",
+                            _vm._l(_vm.errors, function(
+                              fieldsError,
+                              fieldName
+                            ) {
+                              return _c("li", { key: fieldName }, [
+                                _c("strong", [_vm._v(_vm._s(fieldName))]),
+                                _vm._v(
+                                  " " +
+                                    _vm._s(fieldsError.join("\n")) +
+                                    "\n                            "
+                                )
+                              ])
+                            })
+                          )
+                        ])
+                      : _vm._e()
                   ]
                 )
               ])
@@ -59206,7 +59252,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -59217,6 +59263,10 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
 //
 //
 //
@@ -59318,6 +59368,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 fileLink.click();
             });
+        },
+        exportActivityToCsv: function exportActivityToCsv() {
+            axios({
+                url: '/api/customers/log/export/csv',
+                method: 'GET',
+                responseType: 'blob'
+            }).then(function (response) {
+                var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                var fileLink = document.createElement('a');
+                console.log(response.data);
+                fileLink.href = fileURL;
+                fileLink.setAttribute('download', 'file.csv');
+                document.body.appendChild(fileLink);
+
+                fileLink.click();
+            });
         }
     }
 });
@@ -59333,125 +59399,176 @@ var render = function() {
   return _c("div", { staticClass: "row justify-content-center" }, [
     _c("div", { staticClass: "col-md-12" }, [
       _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "table-responsive" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary",
-              attrs: { type: "button" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.exportActivityToXlsx()
+        _c(
+          "div",
+          { staticClass: "table-responsive" },
+          [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                staticStyle: { margin: "1rem" },
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.exportActivityToXlsx()
+                  }
                 }
-              }
-            },
-            [_vm._v("Export")]
-          ),
-          _vm._v(" "),
-          _c(
-            "table",
-            { staticClass: "table table-hover table-bordered table-striped" },
-            [
-              _vm._m(0),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.activities, function(activity, index) {
-                  return _c("tr", { key: activity.id }, [
-                    _c("th", { attrs: { scope: "row" } }, [
-                      _vm._v(_vm._s(index + 1))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(activity.description))]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(activity.properties.attributes.name) +
-                          "\n\n                            "
-                      ),
-                      activity.properties.old &&
-                      activity.properties.old.name !==
-                        activity.properties.attributes.name
-                        ? _c("span", { staticStyle: { color: "red" } }, [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(activity.properties.old.name) +
-                                "\n                            "
-                            )
-                          ])
-                        : _vm._e()
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(activity.properties.attributes.email) +
-                          "\n\n                            "
-                      ),
-                      activity.properties.old &&
-                      activity.properties.old.email !==
-                        activity.properties.attributes.email
-                        ? _c("span", { staticStyle: { color: "red" } }, [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(activity.properties.old.email) +
-                                "\n                            "
-                            )
-                          ])
-                        : _vm._e()
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(activity.properties.attributes.phone) +
-                          "\n\n                            "
-                      ),
-                      activity.properties.old &&
-                      activity.properties.old.phone !==
-                        activity.properties.attributes.phone
-                        ? _c("span", { staticStyle: { color: "red" } }, [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(activity.properties.old.phone) +
-                                "\n                            "
-                            )
-                          ])
-                        : _vm._e()
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(activity.properties.attributes.website) +
-                          "\n\n                            "
-                      ),
-                      activity.properties.old &&
-                      activity.properties.old.website !==
-                        activity.properties.attributes.website
-                        ? _c("span", { staticStyle: { color: "red" } }, [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(activity.properties.old.website) +
-                                "\n                            "
-                            )
-                          ])
-                        : _vm._e()
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(_vm._s(activity.properties.attributes.created_at))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(activity.created_at))])
-                  ])
-                })
-              )
-            ]
-          )
-        ])
+              },
+              [_vm._v("Export "), _c("i", { staticClass: "far fa-file-excel" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                staticStyle: { margin: "1rem" },
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.exportActivityToCsv()
+                  }
+                }
+              },
+              [_vm._v("Export "), _c("i", { staticClass: "fas fa-table" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "router-link",
+              {
+                staticStyle: {
+                  position: "absolute",
+                  right: "1rem",
+                  top: "1.5rem"
+                },
+                attrs: { to: "/customers" }
+              },
+              [_vm._v("Back to customers")]
+            ),
+            _vm._v(" "),
+            _c(
+              "table",
+              { staticClass: "table table-hover table-bordered table-striped" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.activities, function(activity, index) {
+                    return _c("tr", { key: activity.id }, [
+                      _c("th", { attrs: { scope: "row" } }, [
+                        _vm._v(_vm._s(index + 1))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(activity.description))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(activity.properties.attributes.name) +
+                            "\n                            "
+                        ),
+                        _c("br"),
+                        _vm._v(" "),
+                        activity.properties.old &&
+                        activity.properties.old.name !==
+                          activity.properties.attributes.name
+                          ? _c("span", { staticStyle: { color: "red" } }, [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(activity.properties.old.name) +
+                                  "\n                            "
+                              )
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(activity.properties.attributes.email) +
+                            "\n                            "
+                        ),
+                        _c("br"),
+                        _vm._v(" "),
+                        activity.properties.old &&
+                        activity.properties.old.email !==
+                          activity.properties.attributes.email
+                          ? _c("span", { staticStyle: { color: "red" } }, [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(activity.properties.old.email) +
+                                  "\n                            "
+                              )
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(activity.properties.attributes.phone) +
+                            "\n                            "
+                        ),
+                        _c("br"),
+                        _vm._v(" "),
+                        activity.properties.old &&
+                        activity.properties.old.phone !==
+                          activity.properties.attributes.phone
+                          ? _c("span", { staticStyle: { color: "red" } }, [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(activity.properties.old.phone) +
+                                  "\n                            "
+                              )
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(activity.properties.attributes.website) +
+                            "\n                            "
+                        ),
+                        _c("br"),
+                        _vm._v(" "),
+                        activity.properties.old &&
+                        activity.properties.old.website !==
+                          activity.properties.attributes.website
+                          ? _c("span", { staticStyle: { color: "red" } }, [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(activity.properties.old.website) +
+                                  "\n                            "
+                              )
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(activity.properties.attributes.created_at)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(activity.properties.attributes.updated_at)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(activity.created_at))])
+                    ])
+                  })
+                )
+              ]
+            )
+          ],
+          1
+        )
       ])
     ])
   ])
@@ -59476,6 +59593,8 @@ var staticRenderFns = [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Website")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Created at")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Updated at")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Date")])
       ])

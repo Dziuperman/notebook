@@ -31,5 +31,6 @@ Route::group(['middleware' => 'jwt.auth'], function ($router) {
     Route::delete('customers/delete/{id}', 'CustomersController@destroy');
     Route::get('customers/log/show', 'CustomersController@log');
     Route::get('customers/log/export', 'CustomersController@activityExport');
+    Route::get('customers/log/export/csv', 'CustomersController@activityExportToCsv');
 });
 

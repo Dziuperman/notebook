@@ -154,7 +154,7 @@ class CustomersController extends Controller
     {
         $currentUserId = \Auth::user()->id;
 
-        $customers = Activity::where('causer_id', '=', $currentUserId)->get();
+        $customers = Activity::where('causer_id', '=', $currentUserId)->latest()->get();
 
         if($customers) {
             return response()->json([
@@ -188,6 +188,11 @@ class CustomersController extends Controller
      */
     public function activityExport()
     {
-        return Excel::download(new ActivityLogExport(), 'customers.xlsx');
+        return Excel::download(new ActivityLogExport(), 'activity-log.xlsx');
+    }
+
+    public function activityExportToCsv()
+    {
+        return Excel::download(new ActivityLogExport(), 'activity-log.csv');
     }
 }

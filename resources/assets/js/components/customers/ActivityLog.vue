@@ -3,7 +3,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="table-responsive">
-                    <button type="button" class="btn btn-primary" @click.prevent="exportActivityToXlsx()">Export</button>
+                    <button type="button" class="btn btn-primary" style="margin: 1rem;" @click.prevent="exportActivityToXlsx()">Export <i class="far fa-file-excel"></i></button>
+                    <button type="button" class="btn btn-primary" style="margin: 1rem;" @click.prevent="exportActivityToCsv()">Export <i class="fas fa-table"></i></i></button>
+                    <router-link to="/customers" style="position: absolute; right: 1rem; top: 1.5rem;">Back to customers</router-link>
                     <table class="table table-hover table-bordered table-striped">
                         <thead>
                         <tr>
@@ -14,6 +16,7 @@
                             <th scope="col">Phone</th>
                             <th scope="col">Website</th>
                             <th scope="col">Created at</th>
+                            <th scope="col">Updated at</th>
                             <th scope="col">Date</th>
                         </tr>
                         </thead>
@@ -23,7 +26,7 @@
                             <td>{{activity.description}}</td>
                             <td>
                                 {{activity.properties.attributes.name}}
-
+                                <br>
                                 <span v-if="activity.properties.old &&
                                     (activity.properties.old.name !== activity.properties.attributes.name)" style="color: red;">
                                     {{activity.properties.old.name}}
@@ -31,7 +34,7 @@
                             </td>
                             <td>
                                 {{activity.properties.attributes.email}}
-
+                                <br>
                                 <span v-if="activity.properties.old &&
                                     (activity.properties.old.email !== activity.properties.attributes.email)" style="color: red;">
                                     {{activity.properties.old.email}}
@@ -39,7 +42,7 @@
                             </td>
                             <td>
                                 {{activity.properties.attributes.phone}}
-
+                                <br>
                                 <span v-if="activity.properties.old &&
                                     (activity.properties.old.phone !== activity.properties.attributes.phone)" style="color: red;">
                                     {{activity.properties.old.phone}}
@@ -47,13 +50,14 @@
                             </td>
                             <td>
                                 {{activity.properties.attributes.website}}
-
+                                <br>
                                 <span v-if="activity.properties.old &&
                                     (activity.properties.old.website !== activity.properties.attributes.website)" style="color: red;">
                                     {{activity.properties.old.website}}
                                 </span>
                             </td>
                             <td>{{activity.properties.attributes.created_at}}</td>
+                            <td>{{activity.properties.attributes.updated_at}}</td>
                             <td>{{activity.created_at}}</td>
                         </tr>
                         </tbody>
@@ -98,7 +102,23 @@
 
                     fileLink.click();
                 });
-            }
+            },
+            exportActivityToCsv() {
+                axios({
+                    url: '/api/customers/log/export/csv',
+                    method: 'GET',
+                    responseType: 'blob',
+                }).then((response) => {
+                    let fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                    let fileLink = document.createElement('a');
+                    console.log(response.data);
+                    fileLink.href = fileURL;
+                    fileLink.setAttribute('download', 'file.csv');
+                    document.body.appendChild(fileLink);
+
+                    fileLink.click();
+                });
+            },
         }
     }
 </script>

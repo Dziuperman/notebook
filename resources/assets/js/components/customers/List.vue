@@ -10,8 +10,8 @@
                         <div class="card-tools" style="position: absolute; right: 1rem; top: 0.5rem">
                             <button type="button" class="btn btn-primary" @click="reload">Reload</button>
                         </div>
-                        <button type="button" class="btn btn-primary" @click.prevent="exportXlsx">Download</button>
-                        <router-link to="customers/log/show">Log</router-link>
+                        <button type="button" class="btn btn-primary" @click.prevent="exportXlsx">Download <i class="far fa-file-excel"></i></button>
+                        <router-link to="customers/log/show" class="btn btn-info">Log <i class="fas fa-align-justify"></i></router-link>
                     </div>
 
                     <div class="card-body">
@@ -173,6 +173,13 @@
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button :disabled="form.busy" type="submit" class="btn btn-primary">Save changes</button>
                         </div>
+                        <div class="errors" v-if="errors">
+                            <ul>
+                                <li v-for="(fieldsError, fieldName) in errors" :key="fieldName">
+                                    <strong>{{ fieldName }}</strong> {{ fieldsError.join('\n') }}
+                                </li>
+                            </ul>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -312,6 +319,7 @@
                 });
             },
             create() {
+                this.errors = null;
                 this.editMode = false;
                 this.form.reset();
                 this.form.clear();
@@ -332,6 +340,7 @@
                     .then(response => {
                         this.getData();
                         $('#customerModalLong').modal('hide');
+                        this.errors = null;
                         if(this.form.successful) {
                             this.$snotify.success('Customer successfully saved', 'Success')
                         } else {
@@ -349,6 +358,7 @@
                 console.log(customer);
             },
             edit(customer) {
+                this.errors = null;
                 this.editMode = true;
                 this.form.reset();
                 this.form.clear();
@@ -356,6 +366,15 @@
                 $("#customerModalLong").modal("show");
             },
             update() {
+                this.errors = null;
+                const constraints = this.getConstraints();
+                const errors = validate(this.form, constraints);
+
+                if(errors) {
+                    this.errors = errors;
+                    return;
+                }
+
                 this.form.busy = true;
                 this.form
                     .post("/api/customers/update/" + this.form.id)
@@ -441,11 +460,6 @@
                     }
                 };
             }
-        },
-        computed: {
-            // customers() {
-            //     return this.$store.getters.customers;
-            // }
         },
         components: {
             PaginationComponent,
